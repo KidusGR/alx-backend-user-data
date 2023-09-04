@@ -23,6 +23,8 @@ class Auth:
         if path[-1] != "/":
             check += "/"
 
+        excluded_paths.append("/api/v1/stat*/")
+
         if check.split("/")[-2][:-2] == "stat":
             check = check[:-3] + "*/"
 
