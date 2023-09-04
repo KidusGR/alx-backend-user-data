@@ -19,10 +19,24 @@ class Auth:
         check = path
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
-        if path[-1] != "/" or path[-1] != "*":
+
+        if path[-1] == "*" or path[-2] == "*":
+            if path[-1] != "/":
+                for exPath in excluded_paths:
+                    last = path.split("/")[-1].replace("*", "")
+                    if last in exPath.split("/")[-2]:
+                        return False
+            else:
+                last = path.split("/")[-2].replace("*", "")
+                if last in exPath.split("/")[-2]:
+                    return False
+
+        if path[-1] != "/":
             check += "/"
+
         if check in excluded_paths or path in excluded_paths:
             return False
+
         return True
 
     def authorization_header(self, request=None) -> str:
