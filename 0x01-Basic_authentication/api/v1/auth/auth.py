@@ -14,7 +14,7 @@ class Auth:
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
-        Returns False - path and excluded_paths
+        Returns Bool - path and excluded_paths
         """
         check = path
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
@@ -30,7 +30,6 @@ class Auth:
             check = check[:-2] + "*/"
 
         if check in excluded_paths or path in excluded_paths:
-
             return False
 
         return True
