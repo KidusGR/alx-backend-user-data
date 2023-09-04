@@ -20,21 +20,17 @@ class Auth:
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
 
-        if path[-1] == "*" or path[-2] == "*":
-            if path[-1] != "/":
-                for exPath in excluded_paths:
-                    last = path.split("/")[-1].replace("*", "")
-                    if last in exPath.split("/")[-2]:
-                        return False
-            else:
-                last = path.split("/")[-2].replace("*", "")
-                if last in exPath.split("/")[-2]:
-                    return False
-
         if path[-1] != "/":
             check += "/"
 
+        if check.split("/")[-2][:-2] == "stat":
+            check = check[:-3] + "*/"
+
+        if check.split("/")[-2][:-1] == "stat":
+            check = check[:-2] + "*/"
+
         if check in excluded_paths or path in excluded_paths:
+
             return False
 
         return True

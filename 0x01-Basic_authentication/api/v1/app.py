@@ -49,10 +49,10 @@ def before_request():
     """
     before_request
     """
-    authorized_list = ['/api/v1/stat*',
-                       '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    excluded_paths = ['/api/v1/stat*/',
+                      '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
-    if auth and auth.require_auth(request.path, authorized_list):
+    if auth and auth.require_auth(request.path, excluded_paths):
         if not auth.authorization_header(request):
             abort(401)
         if not auth.current_user(request):
