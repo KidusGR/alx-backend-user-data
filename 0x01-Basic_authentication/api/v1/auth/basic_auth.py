@@ -66,3 +66,20 @@ class BasicAuth(Auth):
         decoded = self.decode_base64_authorization_header(b64header)
         user_creds = self.extract_user_credentials(decoded)
         return self.user_object_from_credentials(*user_creds)
+
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str) -> TypeVar('User'):
+        """Retrieves a user based on the user's authentication credentials.
+        """
+        if type(user_email) == str and type(user_pwd) == str:
+            try:
+                users = User.search({'email': user_email})
+            except Exception:
+                return None
+            if len(users) <= 0:
+                return None
+            if users[0].is_valid_password(user_pwd):
+                return users[0]
+        return None
