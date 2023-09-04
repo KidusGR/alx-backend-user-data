@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" Base module
-"""
+""" Base module """
+
 from datetime import datetime
 from typing import TypeVar, List, Iterable
 from os import path
@@ -19,6 +19,7 @@ class Base():
     def __init__(self, *args: list, **kwargs: dict):
         """ Initialize a Base instance
         """
+
         s_class = str(self.__class__.__name__)
         if DATA.get(s_class) is None:
             DATA[s_class] = {}
@@ -38,6 +39,7 @@ class Base():
     def __eq__(self, other: TypeVar('Base')) -> bool:
         """ Equality
         """
+
         if type(self) != type(other):
             return False
         if not isinstance(self, Base):
@@ -45,8 +47,9 @@ class Base():
         return (self.id == other.id)
 
     def to_json(self, for_serialization: bool = False) -> dict:
-        """ Convert the object a JSON dictionary
+        """ Convert the object to a python dictionary
         """
+
         result = {}
         for key, value in self.__dict__.items():
             if not for_serialization and key[0] == '_':
@@ -61,6 +64,7 @@ class Base():
     def load_from_file(cls):
         """ Load all objects from file
         """
+
         s_class = cls.__name__
         file_path = ".db_{}.json".format(s_class)
         DATA[s_class] = {}
@@ -76,6 +80,7 @@ class Base():
     def save_to_file(cls):
         """ Save all objects to file
         """
+
         s_class = cls.__name__
         file_path = ".db_{}.json".format(s_class)
         objs_json = {}
@@ -88,6 +93,7 @@ class Base():
     def save(self):
         """ Save current object
         """
+
         s_class = self.__class__.__name__
         self.updated_at = datetime.utcnow()
         DATA[s_class][self.id] = self
@@ -96,6 +102,7 @@ class Base():
     def remove(self):
         """ Remove object
         """
+
         s_class = self.__class__.__name__
         if DATA[s_class].get(self.id) is not None:
             del DATA[s_class][self.id]
@@ -105,6 +112,7 @@ class Base():
     def count(cls) -> int:
         """ Count all objects
         """
+
         s_class = cls.__name__
         return len(DATA[s_class].keys())
 
@@ -112,12 +120,14 @@ class Base():
     def all(cls) -> Iterable[TypeVar('Base')]:
         """ Return all objects
         """
+
         return cls.search()
 
     @classmethod
     def get(cls, id: str) -> TypeVar('Base'):
         """ Return one object by ID
         """
+
         s_class = cls.__name__
         return DATA[s_class].get(id)
 
@@ -125,6 +135,7 @@ class Base():
     def search(cls, attributes: dict = {}) -> List[TypeVar('Base')]:
         """ Search all objects with matching attributes
         """
+
         s_class = cls.__name__
         def _search(obj):
             if len(attributes) == 0:
