@@ -3,9 +3,9 @@
 
 from tabnanny import check
 from flask import request
+import fnmatch
 from typing import TypeVar, List
 User = TypeVar('User')
-import fnmatch
 
 
 class Auth:
