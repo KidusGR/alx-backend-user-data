@@ -5,6 +5,7 @@ from tabnanny import check
 from flask import request
 from typing import TypeVar, List
 User = TypeVar('User')
+import fnmatch
 
 
 class Auth:
@@ -23,16 +24,20 @@ class Auth:
         if path[-1] != "/":
             check += "/"
 
-        excluded_paths.append("/api/v1/stat*/")
+        for excluded_path in excluded_paths:
+            if fnmatch.fnmatch(check, excluded_path):
+                return False
 
-        if check.split("/")[-2][:-2] == "stat":
-            check = check[:-3] + "*/"
+        # excluded_paths.append("/api/v1/stat*/")
 
-        if check.split("/")[-2][:-1] == "stat":
-            check = check[:-2] + "*/"
+        # if check.split("/")[-2][:-2] == "stat":
+        #     check = check[:-3] + "*"
 
-        if check in excluded_paths or path in excluded_paths:
-            return False
+        # if check.split("/")[-2][:-1] == "stat":
+        #     check = check[:-2] + "*"
+
+        # if check in excluded_paths or path in excluded_paths:
+        #     return False
 
         return True
 

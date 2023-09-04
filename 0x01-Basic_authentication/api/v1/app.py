@@ -49,7 +49,7 @@ def before_request():
     """
     before_request
     """
-    excluded_paths = ['/api/v1/stat*/',
+    excluded_paths = ['/api/v1/stat*',
                       '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
     if auth and auth.require_auth(request.path, excluded_paths):
