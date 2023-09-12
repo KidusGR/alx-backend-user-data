@@ -53,7 +53,7 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> str:
-        """ 
+        """
          Takes an email as a string argument
          and returns the session ID as a string.
         """
