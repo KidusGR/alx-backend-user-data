@@ -38,9 +38,15 @@ class SessionAuth(Auth):
         Return:
             user id or None if session_id is None or not a string
         """
-        if session_id is None or not isinstance(session_id, str):
+        if session_id is None:
             return None
-        return self.user_id_by_session_id.get(session_id)
+
+        if not isinstance(session_id, str):
+            return None
+        try:
+            return self.user_id_by_session_id.get(session_id)
+        except KeyError:
+            return None
 
     def current_user(self, request=None):
         """
