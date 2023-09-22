@@ -45,7 +45,7 @@ class SessionAuth(Auth):
             return None
 
         if str(session_id) in list(self.user_id_by_session_id.keys()):
-            usID = self.user_id_by_session_id.get(session_id)
+            usID = self.user_id_by_session_id.get(str(session_id))
             return usID
         else:
             return None
