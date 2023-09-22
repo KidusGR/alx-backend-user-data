@@ -39,7 +39,6 @@ class SessionDBAuth(SessionExpAuth):
         """
         try:
             user_id = UserSession.search({"session_id": session_id})
-            
             return user_id[0].__dict__['user_id']
         except KeyError:
             return None
