@@ -6,8 +6,14 @@
 import logging
 import os
 import re
-from typing import List
+from typing import List, Any
 import mysql.connector
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.pooling import PooledMySQLConnection
+from mysql.connector.connection_cext import CMySQLConnection
+from mysql.connector.cursor_cext import CMySQLCursor
+from mysql.connector.cursor import MySQLCursor
+
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -57,27 +63,27 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> PooledMySQLConnection | MySQLConnection | CMySQLConnection:
     """ A method that implements db conectivity """
 
     psw: str = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     username: str = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
     host: str = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
-    connection = mysql.connector.connect(
-        host=host,
-        database=db_name,
-        user=username,
-        password=psw)
-    conn: mysql.connector.connection.MySQLConnection = connection
-    return conn
+    db_name: str | None = os.environ.get('PERSONAL_DATA_DB_NAME')
+    connection: PooledMySQLConnection | MySQLConnection | CMySQLConn\
+        ection = mysql.connector.connect(
+            host=host,
+            database=db_name,
+            user=username,
+            password=psw)
+    return connection
 
 
 def main() -> None:
     """ A method that implements a main function """
 
-    db: mysql.connector.connection.MySQLConnection = get_db()
-    cursor: mysql.connector.cursor.MySQLCursor = db.cursor()
+    db: PooledMySQLConnection | MySQLConnection | CMySQLConnection = get_db()
+    cursor: Any | MySQLCursor | CMySQLCursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
     for row in cursor:
         message = f"name={row[0]!r}; email={row[1]!r}; phone={row[2]!r}; " +\
