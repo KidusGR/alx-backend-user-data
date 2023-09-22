@@ -46,7 +46,8 @@ class SessionAuth(Auth):
         try:
             seID = self.user_id_by_session_id.get(session_id)
             return seID
-        except KeyError:
+        except Exception as e:
+            e = e
             return None
 
     def current_user(self, request=None):
