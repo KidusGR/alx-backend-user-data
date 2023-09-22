@@ -44,7 +44,8 @@ class SessionAuth(Auth):
         if not isinstance(session_id, str):
             return None
         try:
-            return self.user_id_by_session_id.get(session_id)
+            seID = self.user_id_by_session_id.get(session_id)
+            return seID
         except KeyError:
             return None
 
