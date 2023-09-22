@@ -43,11 +43,11 @@ class SessionAuth(Auth):
 
         if not isinstance(session_id, str):
             return None
-        try:
-            seID = self.user_id_by_session_id.get(session_id)
-            return seID
-        except Exception as e:
-            e = e
+
+        if str(session_id) in list(self.user_id_by_session_id.keys()):
+            usID = self.user_id_by_session_id.get(session_id)
+            return usID
+        else:
             return None
 
     def current_user(self, request=None):
