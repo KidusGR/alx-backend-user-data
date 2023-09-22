@@ -9,7 +9,7 @@ import re
 from typing import List
 import mysql.connector
 
-PII_FIELDS: tuple = ("name", "email", "phone", "ssn", "password")
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -17,7 +17,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
     """ Replacing """
 
     for f in fields:
-        message: str = re.sub(
+        message = re.sub(
             rf"{f}=(.*?)\{separator}",
             f'{f}={redaction}{separator}',
             message)
@@ -50,9 +50,9 @@ def get_logger() -> logging.Logger:
 
     logger: logging.Logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
-    logger.propagate: bool = False
+    logger.propagate = False
     handler: logging.StreamHandler = logging.StreamHandler()
-    handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    handler.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     logger.addHandler(handler)
     return logger
 
@@ -63,12 +63,13 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     psw: str = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     username: str = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
     host: str = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    db_name: str = os.environ.get('PERSONAL_DATA_DB_NAME')
-    conn: mysql.connector.connection.MySQLConnection = mysql.connector.connect(
+    db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
+    connection = mysql.connector.connect(
         host=host,
         database=db_name,
         user=username,
         password=psw)
+    conn: mysql.connector.connection.MySQLConnection = connection
     return conn
 
 
@@ -79,9 +80,9 @@ def main() -> None:
     cursor: mysql.connector.cursor.MySQLCursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
     for row in cursor:
-        message: str = f"name={row[0]}; email={row[1]}; phone={row[2]}; " +\
-            f"ssn={row[3]}; password={row[4]};ip={row[5]}; " +\
-            f"last_login={row[6]}; user_agent={row[7]};"
+        message = f"name={row[0]!r}; email={row[1]!r}; phone={row[2]!r}; " +\
+            f"ssn={row[3]!r}; password={row[4]!r};ip={row[5]!r}; " +\
+            f"last_login={row[6]!r}; user_agent={row[7]!r};"
         print(message)
     cursor.close()
     db.close()
