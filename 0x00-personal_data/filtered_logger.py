@@ -63,7 +63,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> PooledMySQLConnection | MySQLConnection | CMySQLConnection:
+def get_db() -> MySQLConnection:
     """ A method that implements db conectivity """
 
     psw: str = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
