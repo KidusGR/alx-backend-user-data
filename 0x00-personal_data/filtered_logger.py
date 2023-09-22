@@ -70,7 +70,7 @@ def get_db() -> PooledMySQLConnection | MySQLConnection | CMySQLConnection:
     username: str = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
     host: str = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
     db_name: str | None = os.environ.get('PERSONAL_DATA_DB_NAME')
-    connection: PooledMySQLConnection | MySQLConnection | CMySQLConnection = mysql.connector.connect(
+    connection: MySQLConnection = mysql.connector.connect(
         host=host,
         database=db_name,
         user=username,
