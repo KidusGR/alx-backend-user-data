@@ -6,7 +6,7 @@
 import logging
 import os
 import re
-from typing import List, Any
+from typing import List, Any, Union
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
@@ -70,12 +70,15 @@ def get_db() -> PooledMySQLConnection | MySQLConnection | CMySQLConnection:
     username: str = os.environ.get('PERSONAL_DATA_DB_USERNAME', "root")
     host: str = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
     db_name: str | None = os.environ.get('PERSONAL_DATA_DB_NAME')
-    connection: PooledMySQLConnection | MySQLConnection | CMySQLConn\
-        ection = mysql.connector.connect(
-            host=host,
-            database=db_name,
-            user=username,
-            password=psw)
+    connection: Union[
+                    PooledMySQLConnection,
+                    MySQLConnection,
+                    CMySQLConnection
+                ] = mysql.connector.connect(
+        host=host,
+        database=db_name,
+        user=username,
+        password=psw)
     return connection
 
 
