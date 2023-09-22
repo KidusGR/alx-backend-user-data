@@ -39,8 +39,8 @@ class SessionDBAuth(SessionExpAuth):
         """
         try:
             user_id = UserSession.search({"session_id": session_id})
-            if user_id:
-                return user_id
+            
+            return user_id
         except KeyError:
             return None
         return None
